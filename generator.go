@@ -71,13 +71,13 @@ func (t *{{.Typed}}) UnmarshalJSON(src []byte) error {
 		return err
 	}
 	switch wrapper.T {
-	{{- range $_, $name := .Structs }}
-	{{if isPointer $name -}} 
+	{{- range .Structs }}
+	{{if isPointer . -}}
 	case "{{.}}":
-		t.{{$.Interface}} = &{{trimStar $name}}{}
+		t.{{$.Interface}} = &{{trimStar . }}{}
 	{{else -}}
 	case "{{.}}":
-		t.{{$.Interface}} = {{trimStar $name}}{}
+		t.{{$.Interface}} = {{trimStar . }}{}
 	{{- end }}
 	{{- end }}
 	default:

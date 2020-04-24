@@ -72,12 +72,12 @@ func (t *{{.Typed}}) UnmarshalJSON(src []byte) error {
 	}
 	switch wrapper.T {
 	{{- range .Structs }}
-	{{if isPointer . -}}
-	case "{{.}}":
-		t.{{$.Interface}} = &{{trimStar . }}{}
+	{{if isPointer .Type -}}
+	case "{{.Alias}}":
+		t.{{$.Interface}} = &{{trimStar .Type }}{}
 	{{else -}}
-	case "{{.}}":
-		t.{{$.Interface}} = {{trimStar . }}{}
+	case "{{.Alias}}":
+		t.{{$.Interface}} = {{trimStar .Type }}{}
 	{{- end }}
 	{{- end }}
 	default:
@@ -91,9 +91,9 @@ func (t *{{.Typed}}) UnmarshalJSON(src []byte) error {
 `
 
 var tmplMethodsRaw = `
-{{ range $_, $name := .Structs }}
-func (s {{$name}}) typedjson(*{{$.Typed}}) string {
-	return "{{$name}}"
+{{ range .Structs }}
+func (s {{.Type}}) typedjson(*{{$.Typed}}) string {
+	return "{{.Alias}}"
 }
 {{ end }}
 `

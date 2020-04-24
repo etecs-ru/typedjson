@@ -19,13 +19,18 @@ const (
 	ExitCodeError = 1
 )
 
+type Struct struct {
+	Type  string
+	Alias string
+}
+
 type GeneratorArgs struct {
 	OutputPath string
 	Interface  string
 	Typed      string
 	Package    string
 	Imports    []string
-	Structs    []string
+	Structs    []Struct
 	AllArgs    []string
 }
 
@@ -54,6 +59,22 @@ func main() {
 	}
 }
 
+func parseStructs(args []string) []Struct {
+	structs := make([]Struct, 0, len(args))
+	for _, arg := range args {
+		var s Struct
+		if idx := strings.Index(arg, "="); idx == -1 {
+			s.Alias = arg
+			s.Type = arg
+		} else {
+			s.Alias = arg[:idx]
+			s.Type = arg[idx+1:]
+		}
+		structs = append(structs, s)
+	}
+	return structs
+}
+
 func parseArguments() (*GeneratorArgs, error) {
 	ga := GeneratorArgs{}
 	flag.StringVar(&ga.Package, "package", os.Getenv("GOPACKAGE"), "package name in generated file (default to GOPACKAGE)")
@@ -62,7 +83,7 @@ func parseArguments() (*GeneratorArgs, error) {
 	flag.StringVar(&ga.OutputPath, "output", "", "output path where generated code should be saved")
 	flag.Parse()
 
-	ga.Structs = flag.Args()
+	ga.Structs = parseStructs(flag.Args())
 
 	if ga.Typed == "" {
 		ga.Typed = ga.Interface + "Typed"

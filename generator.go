@@ -47,7 +47,7 @@ type {{.Typed}} struct {
 } 
 
 func (t {{.Typed}}) MarshalJSON() ([]byte, error) {
-	typedString := t.{{.Interface}}.typedjson(nil)
+	typedString := t.{{.Interface}}.TypedJSON(nil)
 	wrapper := struct {
 		T string
 		V {{.Interface}}
@@ -94,7 +94,7 @@ func GetEmpty{{.Interface}}(typedString string) ({{.Interface}}, error) {
 }
 
 {{ range .Structs }}
-func (s {{.Type}}) typedjson(*{{$.Typed}}) string {
+func (s {{.Type}}) TypedJSON(*{{$.Typed}}) string {
 	return "{{.Alias}}"
 }
 {{ end }}

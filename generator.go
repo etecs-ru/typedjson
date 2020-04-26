@@ -47,6 +47,9 @@ type {{.Typed}} struct {
 } 
 
 func (t {{.Typed}}) MarshalJSON() ([]byte, error) {
+	if t.{{.Interface}} == nil {
+		return nil, errors.New("nil interface in {{.Typed}}.{{.Interface}}")
+	}
 	typedString := t.{{.Interface}}.TypedJSON(nil)
 	wrapper := struct {
 		T string

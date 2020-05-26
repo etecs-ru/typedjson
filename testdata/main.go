@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-//go:generate go run github.com/darkclainer/typedjson -interface Data *Foo *Bar
+//go:generate go run github.com/etecs-ru/typedjson -interface Data *Foo *Bar
 type Data interface {
 	TypedJSON(*DataTyped) string
 }

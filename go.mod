@@ -1,4 +1,4 @@
-module github.com/darkclainer/typedjson
+module github.com/etecs-ru/typedjson
 
 go 1.14
 

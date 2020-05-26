@@ -12,7 +12,10 @@ type DataTyped struct {
 }
 
 func (t DataTyped) MarshalJSON() ([]byte, error) {
-	typedString := t.Data.typedjson(nil)
+	if t.Data == nil {
+		return nil, errors.New("nil interface in DataTyped.Data")
+	}
+	typedString := t.Data.TypedJSON(nil)
 	wrapper := struct {
 		T string
 		V Data
@@ -32,26 +35,33 @@ func (t *DataTyped) UnmarshalJSON(src []byte) error {
 	if err != nil {
 		return err
 	}
-	switch wrapper.T {
-	case "*Foo":
-		t.Data = &Foo{}
-
-	case "*Bar":
-		t.Data = &Bar{}
-
-	default:
-		return errors.New("unknown type")
+	data, err := GetEmptyData(wrapper.T)
+	if err != nil {
+		return err
 	}
+	t.Data = data
 	if err := json.Unmarshal(wrapper.V, t.Data); err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *Foo) typedjson(*DataTyped) string {
+func GetEmptyData(typedString string) (Data, error) {
+	switch typedString {
+	case "*Foo":
+		return &Foo{}, nil
+	case "*Bar":
+		return &Bar{}, nil
+
+	default:
+		return nil, errors.New("unknown type")
+	}
+}
+
+func (s *Foo) TypedJSON(*DataTyped) string {
 	return "*Foo"
 }
 
-func (s *Bar) typedjson(*DataTyped) string {
+func (s *Bar) TypedJSON(*DataTyped) string {
 	return "*Bar"
 }

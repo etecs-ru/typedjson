@@ -8,7 +8,7 @@ import (
 
 //go:generate go run github.com/darkclainer/typedjson -interface Data *Foo *Bar
 type Data interface {
-	typedjson(*DataTyped) string
+	TypedJSON(*DataTyped) string
 }
 
 type Foo struct {
@@ -46,4 +46,20 @@ func main() {
 	}
 
 	fmt.Printf("%#v\n", oneDecoded)
+
+	src := `
+	{
+	"T": "*Bar",
+	"V": {
+		"b": "a"
+	}
+	}
+	`
+
+	var ddecoded *DataTyped
+	err = json.Unmarshal([]byte(src), &ddecoded)
+	if err != nil {
+		log.Fatal("Unmarshal json: ", err)
+	}
+	fmt.Printf("%#v\n", ddecoded.Data)
 }

@@ -4,7 +4,7 @@ This is a code generator for Go that alleviates JSON marshaling/unmarshaling unr
 
 Imagine, that you send or receive JSON object with some key `config`. 
 The value of this field can correspond to two structs of your Go program: `FooConfig` and `BarConfig`.
-So, the field `Config` in your struct must be able to hold value of two possible types.
+So, the field `Config` in your struct must be able to hold a value of two possible types.
 In this case you basically have next options: 
 
 1. You can declare field `Config` as `interface{}` and somehow determine what type you should expect, assign object of this type to `Config` 
@@ -97,4 +97,3 @@ func main() {
 	}
 }
 ```
-

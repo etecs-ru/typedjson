@@ -2,17 +2,17 @@
 
 This is a code generator for Go that alleviates JSON marshaling/unmarshaling unrelated structs in typed fashion.
 
-Imagine, that you send or receive JSON object with some key `config`. 
+Imagine, that you send or receive a JSON object with some key `config`. 
 The value of this field can correspond to two structs of your Go program: `FooConfig` and `BarConfig`.
 So, the field `Config` in your struct must be able to hold a value of two possible types.
-In this case you basically have next options: 
+In this case, you have the following options:
 
-1. You can declare field `Config` as `interface{}` and somehow determine what type you should expect, assign object of this type to `Config` 
+1. You can declare field `Config` as `interface{}` and somehow determine what type you should expect, assign an object of this type to `Config` 
 and then unmarshal object.
 1. You can unmarshal field `Config` separately.
-1. You can implement custom `MarshalJSON`/`UnmarshalJSON` for third type that automatically will handle this cases.
+1. You can implement custom `MarshalJSON`/`UnmarshalJSON` for the third type that automatically will handle these cases.
 
-This package provides means to generate all boilerplate code for third case.
+This package provides means to generate all boilerplate code for the third case.
 
 ## Usage
 
@@ -36,10 +36,10 @@ Options:
 
 * `-typed` string
 
-	Name of struct that will used for typed interface (default to %%interface%%Typed.
+	The name of the struct that will be used for typed interface (default to `{{interface}}{{Typed}}`).
 
-Each name in position argument should be name of struct. 
-You can set alias for struct name like this: `foo=*FooConfig`.
+Each name in position argument should be the name of the struct. 
+You can set an alias for struct name like this: `foo=*FooConfig`.
 
 ## Example
 
@@ -55,9 +55,9 @@ type BarConfig struct {
 }
 ```
 
-Then you must declare interface that will hold either of these structs.
-The interface must have method `TypedJSON` with special signature. 
-This method help compiler to work with types.
+Then you must declare an interface that will hold either of these structs.
+The interface must have the method `TypedJSON` with a special signature. 
+This method will advise compiler to work with types.
 
 ```go
 //go:generate go run github.com/etecs-ru/typedjson -interface Config *FooConfig *BarConfig
